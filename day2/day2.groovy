@@ -14,8 +14,6 @@ def countValidPasswords(path, passwordValidator) {
     (path as File).readLines().findAll {checkPassword(it, passwordValidator)}.size()
 }
 
-
-
 def checkPassword(passwordLine, passwordValidator) {
     (passwordLine =~ /(?<num1>\d+)-(?<num2>\d+) (?<letter>[a-z]):\s(?<password>[a-z]+)/).find { match, num1, num2, letter, password ->
         passwordValidator(num1, num2, letter, password)
