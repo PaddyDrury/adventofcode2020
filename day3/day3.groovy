@@ -7,9 +7,9 @@ assert part2('testinput.txt') == 336
 println part2('input.txt')
 
 def countTrees(grid, tree, slope) {
-    grid.indexed().findResults { idx, line ->
-        idx % slope.down == 0 ? line : null
-    }.indexed().count { idx, line ->
+    grid.indexed().findResults { idx, row ->
+        idx % slope.down == 0 ? row : null
+    }.indexed().count { idx, row ->
         line.getAt((idx * slope.right) % line.size()) == tree
     }
 }
