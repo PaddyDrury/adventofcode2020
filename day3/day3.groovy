@@ -6,7 +6,7 @@ println part1('input.txt')
 assert part2('testinput.txt') == 336
 println part2('input.txt')
 
-def countTrees(grid, tree, slope) {
+static def countTrees(grid, tree, slope) {
     grid.indexed().findResults { idx, row ->
         idx % slope.down == 0 ? row : null
     }.indexed().count { idx, row ->
@@ -14,11 +14,11 @@ def countTrees(grid, tree, slope) {
     }
 }
 
-def part1(input) {
+static def part1(input) {
     countTrees((input as File).readLines(), '#', [right: 3, down: 1])
 }
 
-def part2(input) {
+static def part2(input) {
     def grid = (input as File).readLines()
     [
             [right: 1, down: 1],

@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 
+
 assert countValidPasswords("testinput.txt", this::validatePassword1) == 2
 assert countValidPasswords("testinput.txt", this::validatePassword2) == 1
 

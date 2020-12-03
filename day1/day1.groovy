@@ -2,7 +2,7 @@
 import org.paukov.combinatorics3.Generator
 
 
-@Grab(group = 'com.github.dpaukov', module = 'combinatoricslib3', version = '3.3.0')
+@Grab('com.github.dpaukov:combinatoricslib3:3.3.0')
 
 
 def sumOfElementsEquals(list, value) {
