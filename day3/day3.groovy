@@ -10,7 +10,7 @@ def countTrees(grid, tree, slope) {
     grid.indexed().findResults { idx, row ->
         idx % slope.down == 0 ? row : null
     }.indexed().count { idx, row ->
-        line.getAt((idx * slope.right) % line.size()) == tree
+        row.getAt((idx * slope.right) % row.size()) == tree
     }
 }
 
