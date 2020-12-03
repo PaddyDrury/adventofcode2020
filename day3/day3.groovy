@@ -9,13 +9,9 @@ println part2('input.txt')
 def countTrees(grid, tree, slope) {
     grid.indexed().findResults { idx, line ->
         idx % slope.down == 0 ? line : null
-    }.inject([column: 0, treeCount: 0]) { state, line ->
-        if (line.charAt(state.column % line.length()) == tree) {
-            state.treeCount++
-        }
-        state.column += slope.right
-        state
-    }.treeCount
+    }.indexed().count { idx, line ->
+        line.getAt((idx * slope.right) % line.size()) == tree
+    }
 }
 
 def part1(input) {
