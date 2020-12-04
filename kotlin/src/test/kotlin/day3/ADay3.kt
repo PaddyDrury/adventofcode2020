@@ -11,7 +11,7 @@ class ADay3 {
     }
 
     @Test
-    fun testPart3() {
+    fun testPart2() {
         Assertions.assertThat(Day3("inputFiles/day3/testinput.txt").part2()).isEqualTo(336)
     }
 
@@ -21,7 +21,7 @@ class ADay3 {
     }
 
     @Test
-    fun part3() {
-        println("day3 part3: ${Day3("inputFiles/day3/input.txt").part2()}")
+    fun part2() {
+        println("day3 part2: ${Day3("inputFiles/day3/input.txt").part2()}")
     }
 }
