@@ -1,10 +1,9 @@
 package day4
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import java.io.File
 import java.util.function.Predicate
 
-class Day4(private val inputFile: String) {
+class Day4(inputFile: String) {
     private val lines: List<String>
     private val detailRegex = """([a-z]{3}):([^\s]+)""".toRegex()
 
