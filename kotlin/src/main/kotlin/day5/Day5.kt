@@ -30,4 +30,3 @@ fun Iterable<Long>.findFirstMissing(): Long = this.sortedBy { it }.reduce { acc,
 fun <T> Pair<T,T>.getIfEqual(): T? = if(this.first?.equals(this.second) == true) this.first else null
 
 fun midPoint(x: Int, y: Int, roundingMode: RoundingMode): Int = BigDecimal(x.toLong() + y).divide(BigDecimal(2), roundingMode).intValueExact()
-
