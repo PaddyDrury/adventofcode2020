@@ -1,15 +1,10 @@
 package day3
 
+import util.readFile
 import java.io.File
 
 class Day3 (private val inputFile: String) {
-    private val grid: List<String>
-
-    init {
-        grid = readFile(inputFile)
-    }
-
-    fun readFile(fileName: String): List<String> = File(fileName).readLines()
+    private val grid: List<String> = readFile(inputFile)
 
     data class Slope(val right: Int, val down: Int)
 

@@ -1,6 +1,7 @@
 package day1
 
 import org.paukov.combinatorics3.Generator
+import util.readFile
 import java.io.File
 
 class Day1(private val inputFile: String) {
@@ -11,7 +12,6 @@ class Day1(private val inputFile: String) {
         intList = stringsToInts(readFile(inputFile))
     }
 
-    fun readFile(fileName: String): List<String> = File(fileName).readLines()
     fun stringsToInts(list: List<String>): List<Int> = list.map { it.toInt() }
     fun sumsToValue(intList: List<Int>, value: Int): Boolean = intList.sum() == value
     fun combinations(intList: List<Int>, length: Int): Iterable<List<Int>> = Generator.combination(intList).multi(length)

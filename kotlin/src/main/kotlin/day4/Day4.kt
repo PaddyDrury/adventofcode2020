@@ -1,15 +1,11 @@
 package day4
 
-import java.io.File
+import util.readFile
 import java.util.function.Predicate
 
 class Day4(inputFile: String) {
-    private val lines: List<String>
+    private val lines: List<String> = readFile(inputFile)
     private val detailRegex = """([a-z]{3}):([^\s]+)""".toRegex()
-
-    init {
-        lines = readFile(inputFile)
-    }
 
     data class Passport(private val details: Map<String, String>) {
         fun hasRequiredFields(): Boolean = details.keys.containsAll(
@@ -52,7 +48,7 @@ class Day4(inputFile: String) {
                 hasValidHairColour() &&
                 hasValidPassportId()
     }
-    fun readFile(fileName: String): List<String> = File(fileName).readLines()
+
 
     fun part1(): Int = passports().count { it.hasRequiredFields() }
     fun part2(): Int = passports().count { it.isValid() }
