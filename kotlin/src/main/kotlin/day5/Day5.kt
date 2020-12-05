@@ -32,9 +32,7 @@ fun CharSequence.converge(range: Pair<Int, Int>, takeUpper: Char, takeLower: Cha
             }
         }.getIfEqual()
 
-
 fun <T> Pair<T,T>.getIfEqual(): T? = if(this.first?.equals(this.second) == true) this.first else null
-
 
 fun midPoint(x: Int, y: Int, roundingMode: RoundingMode): Int = BigDecimal(x.toLong() + y).divide(BigDecimal(2), roundingMode).intValueExact()
 
