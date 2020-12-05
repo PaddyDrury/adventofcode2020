@@ -9,7 +9,7 @@ class Day5(inputFile: String) {
 
     fun part1(): Long = lines.maxOfOrNull(::seatId)!!
 
-    fun part2(): Long = lines.map(::seatId).sortedBy { it }.fold(100L) { acc, l ->
+    fun part2(): Long = lines.map(::seatId).sortedBy { it }.reduce() { acc, l ->
         if(l == acc +2) {
             return l - 1
         }
