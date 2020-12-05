@@ -25,12 +25,7 @@ fun CharSequence.converge(range: Pair<Int, Int>, takeUpper: Char, takeLower: Cha
             }
         }.getIfEqual()
 
-fun Iterable<Long>.findFirstMissing(): Long = this.sortedBy { it }.reduce { acc, l ->
-    if(acc + 1 < l) {
-        return acc + 1
-    }
-    l
-}
+fun Iterable<Long>.findFirstMissing(): Long = this.sortedBy { it }.reduce { acc, l -> if(acc + 1 < l) acc + 1 else l }
 
 fun <T> Pair<T,T>.getIfEqual(): T? = if(this.first?.equals(this.second) == true) this.first else null
 
