@@ -1,9 +1,8 @@
 package day3
 
 import util.readFile
-import java.io.File
 
-class Day3 (private val inputFile: String) {
+class Day3(private val inputFile: String) {
     private val grid: List<String> = readFile(inputFile)
 
     data class Slope(val right: Int, val down: Int)
@@ -12,21 +11,21 @@ class Day3 (private val inputFile: String) {
 
     fun part2(): Long {
         return listOf(
-                Slope(1,1),
+                Slope(1, 1),
                 Slope(3, 1),
                 Slope(5, 1),
                 Slope(7, 1),
                 Slope(1, 2)
         ).map {
             countTrees(grid, it)
-        }.fold(1L) { acc, i ->  acc * i}
+        }.fold(1L) { acc, i -> acc * i }
     }
 
-    fun countTrees(grid: List<String>, slope: Slope):Int {
+    fun countTrees(grid: List<String>, slope: Slope): Int {
         return grid.filterIndexed { idx, value ->
             idx % slope.down == 0
         }.filterIndexed { idx, row ->
-            row[slope.right * idx % row.length ] == '#'
+            row[slope.right * idx % row.length] == '#'
         }.count()
     }
 

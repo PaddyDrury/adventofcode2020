@@ -2,7 +2,6 @@ package day1
 
 import org.paukov.combinatorics3.Generator
 import util.readFile
-import java.io.File
 
 class Day1(private val inputFile: String) {
 
