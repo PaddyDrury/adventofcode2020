@@ -7,9 +7,13 @@ import java.math.RoundingMode
 class Day5(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
 
-    fun part1(): Long = lines.maxOfOrNull(::seatId)!!
-    fun part2(): Long = lines.map(::seatId).findFirstMissing()
+    fun part1(): Long = lines.maxOfOrNull(::binarySeatId)!!
+    fun part2(): Long = lines.map(::binarySeatId).findFirstMissing()
     fun seatId(seatCode: String): Long = (row(seatCode) * 8L) + column(seatCode)
+    fun binarySeatId(seatCode: String): Long = seatCode
+            .replace("[BR]".toRegex(), "1")
+            .replace("[FL]".toRegex(), "0")
+            .toLong(2)
     fun row(seatCode: String): Int = seatCode.converge(Pair(0, 127), 'B', 'F') ?: error("blah")
     fun column(seatCode: String): Int = seatCode.converge(Pair(0, 7), 'R', 'L') ?: error("blah")
 }
@@ -25,7 +29,7 @@ fun CharSequence.converge(range: Pair<Int, Int>, takeUpper: Char, takeLower: Cha
             }
         }.getIfEqual()
 
-fun Iterable<Long>.findFirstMissing(): Long = this.sortedBy { it }.reduce { acc, l -> if (acc + 1 < l) acc + 1 else l }
+fun Iterable<Long>.findFirstMissing(): Long = this.sortedBy { it }.reduce { acc, l -> if (acc + 1 < l) return acc + 1 else l }
 
 fun <T> Pair<T, T>.getIfEqual(): T? = if (this.first?.equals(this.second) == true) this.first else null
 
