@@ -17,16 +17,16 @@ class Day5(inputFile: String) {
 fun CharSequence.converge(range: Pair<Int, Int>, takeUpper: Char, takeLower: Char): Int? =
         this.fold(range) { acc, t ->
             if (takeLower == t) {
-                Pair(acc.first, midPoint(acc.first, acc.second,RoundingMode.FLOOR))
+                Pair(acc.first, midPoint(acc.first, acc.second, RoundingMode.FLOOR))
             } else if (takeUpper == t) {
                 Pair(midPoint(acc.first, acc.second, RoundingMode.CEILING), acc.second)
-            }  else {
+            } else {
                 acc
             }
         }.getIfEqual()
 
-fun Iterable<Long>.findFirstMissing(): Long = this.sortedBy { it }.reduce { acc, l -> if(acc + 1 < l) acc + 1 else l }
+fun Iterable<Long>.findFirstMissing(): Long = this.sortedBy { it }.reduce { acc, l -> if (acc + 1 < l) acc + 1 else l }
 
-fun <T> Pair<T,T>.getIfEqual(): T? = if(this.first?.equals(this.second) == true) this.first else null
+fun <T> Pair<T, T>.getIfEqual(): T? = if (this.first?.equals(this.second) == true) this.first else null
 
 fun midPoint(x: Int, y: Int, roundingMode: RoundingMode): Int = BigDecimal(x.toLong() + y).divide(BigDecimal(2), roundingMode).intValueExact()

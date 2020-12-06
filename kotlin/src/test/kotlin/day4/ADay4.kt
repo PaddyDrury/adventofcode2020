@@ -4,15 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class ADay4 {
-
-    @Test
-    fun testSplitWhen() {
-        assertThat(mutableListOf("a", "b", "c", "d", "e").splitWhen { it == "c" })
-                .hasSize(2)
-                .contains(mutableListOf("a", "b"))
-                .contains(mutableListOf("d", "e"))
-    }
-
     @Test
     fun testPart1() {
         assertThat(Day4("inputFiles/day4/testinput.txt").part1()).isEqualTo(2)

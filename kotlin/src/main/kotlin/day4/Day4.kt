@@ -1,6 +1,7 @@
 package day4
 
 import util.readFile
+import util.splitWhen
 import java.util.function.Predicate
 
 class Day4(inputFile: String) {
@@ -63,15 +64,4 @@ class Day4(inputFile: String) {
         var (key, value) = it!!.destructured
         Pair(key, value)
     }
-}
-
-fun <T> List<T>.splitWhen(condition: Predicate<T>): List<List<T>> = this.fold(mutableListOf(mutableListOf<T>())) { acc, t ->
-    if (condition.test(t)) {
-        acc.add(mutableListOf())
-    } else {
-        acc.last().add(t)
-    }
-    acc
-}.filter {
-    !it.isEmpty()
 }
