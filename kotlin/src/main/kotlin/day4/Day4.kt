@@ -65,7 +65,7 @@ class Day4(inputFile: String) {
     }
 
     fun detailsFromLine(line: String): Map<String, String> = detailRegex.findAll(line).associate {
-        var (key, value) = it.destructured
+        val (key, value) = it.destructured
         Pair(key, value)
     }
 }

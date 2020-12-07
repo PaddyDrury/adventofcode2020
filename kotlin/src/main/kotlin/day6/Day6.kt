@@ -10,5 +10,5 @@ class Day6(inputFile: String) {
     fun part2(): Int = lines.splitWhen { it.isBlank() }.map { it.intersectingChars().size }.sum()
 }
 
-fun Iterable<String>.intersectingChars(): Set<Char> = this.fold(this.first().toSet()) { acc, s -> acc.intersect(s.toHashSet()) }
+fun Iterable<String>.intersectingChars(): Set<Char> = this.fold(this.first().toSet()) { acc, s -> acc.intersect(s.toSet()) }
 fun String.countDistinct(): Long = this.chars().distinct().count()
