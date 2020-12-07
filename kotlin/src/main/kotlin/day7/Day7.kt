@@ -4,13 +4,8 @@ import util.readFile
 
 class Day7(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
-    private val bags: List<Bag>
     private val lineRegex = """^([a-z]+ [a-z]+) bags contain (.*)${'$'}""".toRegex()
     private val bagRegex = """(\d)+\s([a-z]+\s[a-z]+)""".toRegex()
-
-    init {
-        bags = parseBagMappings()
-    }
 
     class Bag(val colour: String, val children: MutableMap<Bag, Int>) {
         fun containsBagOfColour(colour: String): Boolean = children.keys.map { it.colour }.contains(colour) || children.keys.any { it.containsBagOfColour(colour) }
@@ -30,16 +25,16 @@ class Day7(inputFile: String) {
     fun part1(): Int = countBagsWhichCanContainBagOfColour("shiny gold")
     fun part2(): Long = countBagsWithinBagOfColour("shiny gold")
 
-    fun countBagsWhichCanContainBagOfColour(colour: String): Int = bags.count {
-        it.containsBagOfColour(colour)
+    fun countBagsWhichCanContainBagOfColour(colour: String): Int = parseBagMappings().count {
+        it.value.containsBagOfColour(colour)
     }
 
-    fun countBagsWithinBagOfColour(colour: String): Long = bags.find { it.colour == colour }!!.countChildBags()
+    fun countBagsWithinBagOfColour(colour: String): Long = parseBagMappings()[colour]?.countChildBags() ?: 0
 
-    fun parseBagMappings(): List<Bag> {
+    fun parseBagMappings(): Map<String, Bag> {
         val bags = lines.map { parseBagMapping(it) }.associateBy { it.colour }
         bags.values.forEach { it.populate(bags) }
-        return bags.values.toList()
+        return bags
     }
 
     fun parseBagMapping(line: String): Bag {
