@@ -9,14 +9,14 @@ class ADay7 {
         assertThat(Day7("inputFiles/day7/testinput.txt").part1()).isEqualTo(4)
     }
 
-//    @Test
-//    fun testPart2() {
-//        Assertions.assertThat(Day7("inputFiles/day7/testinput.txt").part2()).isEqualTo(7)
-//    }
+    @Test
+    fun testPart2() {
+        assertThat(Day7("inputFiles/day7/testinput2.txt").part2()).isEqualTo(132)
+    }
 
     @Test
     fun part1() {
-        println("day7 part1: ${Day7("inputFiles/day7/input.txt").part1()}")
+        assertThat(Day7("inputFiles/day7/input.txt").part1()).isEqualTo(8742)
     }
 
 //    @Test

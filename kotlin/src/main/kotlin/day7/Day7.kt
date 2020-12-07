@@ -23,6 +23,11 @@ class Day7(inputFile: String) {
                 }
             }
         }
+
+        fun countBags(): Int = if(bags.isEmpty()) 1 else bags.entries.reduce { acc, e ->
+            acc + (e.key.countBags() * e.value)
+        }
+
     }
 
     fun part1(): Int = countBagsWhichCanContainBagOfColour("shiny gold")
@@ -30,6 +35,8 @@ class Day7(inputFile: String) {
     fun countBagsWhichCanContainBagOfColour(colour: String): Int = parseBagMappings().count {
         it.containsBagOfColour(colour)
     }
+
+    fun countBagsWithinBagOfColour()
 
     fun parseBagMappings(): List<Bag> {
         println ("parsing bag mappings ${lines}")
