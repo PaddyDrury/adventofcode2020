@@ -4,66 +4,51 @@ import util.readFile
 
 class Day7(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
+    private val bags: List<Bag>
     private val lineRegex = """^([a-z]+ [a-z]+) bags contain (.*)${'$'}""".toRegex()
     private val bagRegex = """(\d)+\s([a-z]+\s[a-z]+)""".toRegex()
 
-    class Bag(val colour: String, val bags: MutableMap<Bag, Int>) {
-        fun containsBagOfColour(colour: String): Boolean = directlyContainsBagOfColour(colour) || bags.keys.any { it.containsBagOfColour(colour)}
-        fun directlyContainsBagOfColour(colour: String) =  bags.keys.map { it.colour }.contains(colour)
+    init {
+        bags = parseBagMappings()
+    }
 
-        fun countForColour(colour: String): Int = bags.filterKeys { it.colour == colour }.values.sum()
+    class Bag(val colour: String, val children: MutableMap<Bag, Int>) {
+        fun containsBagOfColour(colour: String): Boolean = children.keys.map { it.colour }.contains(colour) || children.keys.any { it.containsBagOfColour(colour) }
 
+        fun countChildBags(): Long = children.entries.fold(0L) { acc, e ->
+            acc + ((e.key.countChildBags() + 1) * e.value)
+        }
 
-        fun putIfPresent(bag: Bag) {
-            if(this != bag) {
-                if (directlyContainsBagOfColour(bag.colour)) {
-                    bags.put(bag, countForColour(bag.colour))
-                } else {
-                    bags.keys.filter { containsBagOfColour(bag.colour) }.forEach(::putIfPresent)
-                }
+        fun populate(bags: Map<String, Bag>) {
+            if (this.children.isEmpty() && !bags[colour]!!.children.isEmpty()) {
+                this.children.putAll(bags[colour]!!.children)
             }
+            this.children.keys.forEach { it.populate(bags) }
         }
-
-        fun countBags(): Int = if(bags.isEmpty()) 1 else bags.entries.reduce { acc, e ->
-            acc + (e.key.countBags() * e.value)
-        }
-
     }
 
     fun part1(): Int = countBagsWhichCanContainBagOfColour("shiny gold")
+    fun part2(): Long = countBagsWithinBagOfColour("shiny gold")
 
-    fun countBagsWhichCanContainBagOfColour(colour: String): Int = parseBagMappings().count {
+    fun countBagsWhichCanContainBagOfColour(colour: String): Int = bags.count {
         it.containsBagOfColour(colour)
     }
 
-    fun countBagsWithinBagOfColour()
+    fun countBagsWithinBagOfColour(colour: String): Long = bags.find { it.colour == colour }!!.countChildBags()
 
     fun parseBagMappings(): List<Bag> {
-        println ("parsing bag mappings ${lines}")
-        val bags = lines.map { parseBagMapping(it)}
-        println("Found ${bags.size} bags")
-        println(bags)
-        bags.forEach { bag ->
-            bags.forEach { bag2 ->
-                if(bag != bag2) {
-                    println("Putting ${bag2.colour} in ${bag.colour} if possible")
-                    bag.putIfPresent(bag2)
-                }
-            }
-        }
-        println(bags)
-        return bags
+        val bags = lines.map { parseBagMapping(it) }.associateBy { it.colour }
+        bags.values.forEach { it.populate(bags) }
+        return bags.values.toList()
     }
 
     fun parseBagMapping(line: String): Bag {
-        println(line)
-        val(colour, bagListString) = lineRegex.find(line)!!.destructured
-        println(colour)
+        val (colour, bagListString) = lineRegex.find(line)!!.destructured
         return Bag(colour, parseBagList(bagListString))
     }
 
     private fun parseBagList(bagListString: String): MutableMap<Bag, Int> = bagRegex.findAll(bagListString).associate {
-        val(count, colour) = it.destructured
+        val (count, colour) = it.destructured
         Pair(Bag(colour, mutableMapOf()), count.toInt())
     }.toMutableMap()
 
