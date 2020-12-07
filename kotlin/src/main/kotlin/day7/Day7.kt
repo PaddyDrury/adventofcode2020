@@ -14,11 +14,11 @@ class Day7(inputFile: String) {
             acc + ((e.key.countChildBags() + 1) * e.value)
         }
 
-        fun populate(bags: Map<String, Bag>) {
-            if (this.children.isEmpty() && !bags[colour]!!.children.isEmpty()) {
+        fun populateChildren(bags: Map<String, Bag>) {
+            if (this.children.isEmpty() && bags[colour]!!.children.isNotEmpty()) {
                 this.children.putAll(bags[colour]!!.children)
             }
-            this.children.keys.forEach { it.populate(bags) }
+            this.children.keys.forEach { it.populateChildren(bags) }
         }
     }
 
@@ -33,7 +33,7 @@ class Day7(inputFile: String) {
 
     fun parseBagMappings(): Map<String, Bag> {
         val bags = lines.map { parseBagMapping(it) }.associateBy { it.colour }
-        bags.values.forEach { it.populate(bags) }
+        bags.values.forEach { it.populateChildren(bags) }
         return bags
     }
 
