@@ -25,7 +25,7 @@ class Day8(inputFile: String) {
                             }, instruction.argument
                     )
 
-                    val result = instructions.executeFrom(instruction.line, item.second, initialResult.third.takeWhile { it.first !== instruction }.toMutableList())
+                    val result = instructions.executeFrom(instruction.line, item.second, initialResult.third)
                     if(result.second >= instructions.size) {
                         return result.first
                     }

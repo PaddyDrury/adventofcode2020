@@ -21,7 +21,6 @@ class ADay8 {
         assertThat(Day8("inputFiles/day8/testinput.txt").part2()).isEqualTo(8)
     }
 
-
     @Test
     fun part1() {
         assertThat(Day8("inputFiles/day8/input.txt").part1()).isEqualTo(1337)
