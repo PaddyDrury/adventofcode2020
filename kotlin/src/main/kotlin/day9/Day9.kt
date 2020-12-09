@@ -1,7 +1,5 @@
 package day9
 
-
-import com.google.common.collect.EvictingQueue
 import util.*
 
 class Day9(inputFile: String) {
@@ -10,19 +8,18 @@ class Day9(inputFile: String) {
     fun part1(): Long = findFirstInvalid(25)
     fun part2(): Long = computeEncryptionWeakness(25)
 
-    fun findFirstInvalid(preambleLength: Int): Long {
-        lines.map { it.toLong() }.fold(EvictingQueue.create<Long>(preambleLength)) { acc, t ->
-            if (acc.remainingCapacity() == 0 && acc.combinations(2).none { it.sumsToValue(t) }) {
-                return t
+    fun findFirstInvalid(preambleLength: Int): Long = lines.map { it.toLong() }
+            .windowed(preambleLength + 1)
+            .first { window ->
+                window.subList(0, window.size - 1)
+                        .combinations(2)
+                        .none { combo ->
+                            combo.sumsToValue(window.last())
+                        }
             }
-            acc.add(t)
-            acc
-        }
-        error("couldn't find invalid number")
-    }
+            .last()
 
-    fun computeEncryptionWeakness(preambleLength: Int): Long = lines.map{ it.toLong()}.findContiguousRangeSummingTo(findFirstInvalid(preambleLength)).addMinToMax()
-
+    fun computeEncryptionWeakness(preambleLength: Int): Long = lines.map { it.toLong() }.findContiguousRangeSummingTo(findFirstInvalid(preambleLength)).addMinToMax()
 }
 
 fun List<Long>.findContiguousRangeSummingTo(value: Long) = this.sublistBetweenMinAndMaxOf(
