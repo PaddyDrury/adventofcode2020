@@ -21,3 +21,5 @@ fun <T> Collection<T>.combinations(length: Int): Iterable<List<T>> = Generator.c
 fun Iterable<Int>.sumsToValue(value: Int): Boolean = this.sum() == value
 
 fun Iterable<Long>.sumsToValue(value: Long): Boolean = this.sum() == value
+
+fun Iterable<Long>.addMinToMax(): Long = this.minOrNull()!! + this.maxOrNull()!!

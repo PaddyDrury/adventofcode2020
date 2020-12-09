@@ -10,18 +10,18 @@ class ADay9 {
         assertThat(Day9("inputFiles/day9/testinput.txt").findFirstInvalid(5)).isEqualTo(127)
     }
 
-//    @Test
-//    fun testPart2() {
-//        assertThat(Day9("inputFiles/day9/testinput.txt").part2()).isEqualTo(9)
-//    }
+    @Test
+    fun testPart2() {
+        assertThat(Day9("inputFiles/day9/testinput.txt").computeEncryptionWeakness(5)).isEqualTo(62)
+    }
 
     @Test
     fun part1() {
         assertThat(Day9("inputFiles/day9/input.txt").part1()).isEqualTo(41682220)
     }
 
-//    @Test
-//    fun part2() {
-//        assertThat(Day9("inputFiles/day9/input.txt").part2()).isEqualTo(1359)
-//    }
+    @Test
+    fun part2() {
+        assertThat(Day9("inputFiles/day9/input.txt").part2()).isEqualTo(5388976)
+    }
 }
