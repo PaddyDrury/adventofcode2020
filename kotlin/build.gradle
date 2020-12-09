@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     implementation 'com.github.dpaukov:combinatoricslib3:3.3.0'
+    implementation 'com.google.guava:guava:30.0-jre'
 
     testImplementation 'org.assertj:assertj-core'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
