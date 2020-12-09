@@ -21,13 +21,13 @@ class Day9(inputFile: String) {
         error("couldn't find invalid number")
     }
 
-    fun computeEncryptionWeakness(preambleLength: Int): Long = findContiguousRangeSummingTo(findFirstInvalid(preambleLength)).addMinToMax()
+    fun computeEncryptionWeakness(preambleLength: Int): Long = lines.map{ it.toLong()}.findContiguousRangeSummingTo(findFirstInvalid(preambleLength)).addMinToMax()
 
-    fun findContiguousRangeSummingTo(value: Long): List<Long> {
-        val preRange = lines.map { it.toLong( )}.takeWhile { it < value }
-
-        return preRange.sublistBetweenMinAndMaxOf((preRange.indices).toList()
-                .combinations(2)
-                .first { preRange.sublistBetweenMinAndMaxOf(it).sumsToValue(value) })
-    }
 }
+
+fun List<Long>.findContiguousRangeSummingTo(value: Long) = this.sublistBetweenMinAndMaxOf(
+        (this.takeWhile { it < value }.indices)
+                .toList()
+                .combinations(2)
+                .first { this.sublistBetweenMinAndMaxOf(it).sumsToValue(value) }
+)
