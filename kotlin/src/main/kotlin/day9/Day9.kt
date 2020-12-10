@@ -11,7 +11,7 @@ class Day9(inputFile: String) {
     fun findFirstInvalid(preambleLength: Int): Long = lines.map { it.toLong() }
             .windowed(preambleLength + 1)
             .first { window ->
-                window.subList(0, window.size - 1)
+                window.take(preambleLength)
                         .combinations(2)
                         .none { combo ->
                             combo.sumsToValue(window.last())
