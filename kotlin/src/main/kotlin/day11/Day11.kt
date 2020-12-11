@@ -15,10 +15,10 @@ class Day11(inputFile: String) {
 
     fun part2(): Int = initialMap().findEquilibriumPart2().countOccupiedSeats()
 
-    data class SeatOccupancyMap(val seats: Map<SeatCoordinates, SeatState>, val visibleSeatMapping: MutableMap<SeatCoordinates, Set<SeatCoordinates>> = mutableMapOf()) {
+    data class SeatOccupancyMap(val seats: Map<SeatCoordinates, SeatState>, val visibleSeatCache: MutableMap<SeatCoordinates, Set<SeatCoordinates>> = mutableMapOf()) {
         fun nextPart1(): SeatOccupancyMap = SeatOccupancyMap(this.seats.mapValues { nextValuePart1(it.key) })
 
-        fun nextPart2(): SeatOccupancyMap = SeatOccupancyMap(this.seats.mapValues { nextValuePart2(it.key) }, this.visibleSeatMapping)
+        fun nextPart2(): SeatOccupancyMap = SeatOccupancyMap(this.seats.mapValues { nextValuePart2(it.key) }, this.visibleSeatCache)
 
         fun nextValuePart2(coordinates: SeatCoordinates): SeatState {
             val visibleSeatOccupancyCount = findVisibleSeatsFrom(coordinates).count {
@@ -29,9 +29,9 @@ class Day11(inputFile: String) {
         }
 
         fun findVisibleSeatsFrom(coordinates: SeatCoordinates): Set<SeatCoordinates> {
-            visibleSeatMapping[coordinates] = visibleSeatMapping[coordinates]
+            visibleSeatCache[coordinates] = visibleSeatCache[coordinates]
                     ?: coordinates.findVisibleSeats(this.seats.keys)
-            return visibleSeatMapping[coordinates]!!
+            return visibleSeatCache[coordinates]!!
         }
 
         fun nextValuePart1(coordinates: SeatCoordinates): SeatState {
@@ -73,14 +73,14 @@ class Day11(inputFile: String) {
             val right = (this.column + 1..maxColumn)
             val up = (this.row - 1 downTo 0)
             val down = (this.row + 1..maxRow)
-            val seatUpLeft = if (this.column == 0 || this.row == 0) null else left.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatUpRight = if (this.column == maxColumn || this.row == 0) null else right.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatDownLeft = if (this.column == 0 || this.row == maxRow) null else left.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatDownRight = if (this.column == maxColumn || this.row == maxRow) null else right.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatUp = if (this.row == 0) null else up.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains)
-            val seatDown = if (this.row == maxRow) null else down.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains)
-            val seatLeft = if (this.column == 0) null else left.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains)
-            val seatRight = if (this.column == maxColumn) null else right.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains)
+            val seatUpLeft = left.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
+            val seatUpRight = right.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
+            val seatDownLeft = left.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
+            val seatDownRight = right.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
+            val seatUp = up.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains)
+            val seatDown = down.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains)
+            val seatLeft = left.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains)
+            val seatRight = right.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains)
 
             return setOfNotNull(seatUpLeft, seatUpRight, seatDownLeft, seatDownRight, seatUp, seatDown, seatLeft, seatRight).toHashSet()
         }

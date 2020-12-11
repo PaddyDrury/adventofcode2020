@@ -17,6 +17,7 @@ class ADay11 {
                 Day11.SeatCoordinates(4, 7),
                 Day11.SeatCoordinates(4, 8),
         )
+        println( (-1 downTo 0).toList())
     }
 
     @Test
