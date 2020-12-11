@@ -67,22 +67,21 @@ class Day11(inputFile: String) {
                 .toSet()
 
         fun findVisibleSeats(seats: Set<SeatCoordinates>): Set<SeatCoordinates> {
-            val maxRow = seats.maxOf { it.row }
-            val maxColumn = seats.maxOf { it.column }
             val left = (this.column - 1 downTo 0)
-            val right = (this.column + 1..maxColumn)
+            val right = (this.column + 1..seats.maxOf { it.column })
             val up = (this.row - 1 downTo 0)
-            val down = (this.row + 1..maxRow)
-            val seatUpLeft = left.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatUpRight = right.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatDownLeft = left.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatDownRight = right.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains)
-            val seatUp = up.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains)
-            val seatDown = down.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains)
-            val seatLeft = left.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains)
-            val seatRight = right.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains)
+            val down = (this.row + 1..seats.maxOf { it.row })
 
-            return setOfNotNull(seatUpLeft, seatUpRight, seatDownLeft, seatDownRight, seatUp, seatDown, seatLeft, seatRight).toHashSet()
+            return setOfNotNull(
+                    left.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains),
+                    right.zip(up).map { it.toSeatCoordinates() }.firstOrNull(seats::contains),
+                    left.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains),
+                    right.zip(down).map { it.toSeatCoordinates() }.firstOrNull(seats::contains),
+                    up.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains),
+                    down.map { SeatCoordinates(this.column, it) }.firstOrNull(seats::contains),
+                    left.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains),
+                    right.map { SeatCoordinates(it, this.row) }.firstOrNull(seats::contains)
+            ).toHashSet()
         }
     }
 
