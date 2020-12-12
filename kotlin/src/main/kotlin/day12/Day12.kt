@@ -6,8 +6,6 @@ import kotlin.math.abs
 class Day12(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
     private val startingCoords = Coords(0, 0)
-    private val startingPositionDirect = PositionDirect(startingCoords, 90)
-    private val startingPositionWaypoint = PositionWaypoint(startingCoords, Coords(10, 1))
     private val lineRegex = """^([NSEWRLF])(\d+)${'$'}""".toRegex()
 
     data class Coords(val x: Int, val y: Int) {
@@ -27,60 +25,59 @@ class Day12(inputFile: String) {
         fun manhattanDistanceFrom(here: Coords): Int = abs(x - here.x) + abs(y - here.y)
     }
 
-    abstract class Position<T> where T : Position<T> {
+    abstract class Navigator<T> where T : Navigator<T> {
         abstract val coords: Coords
-        abstract fun east(distance: Int): T
-        fun west(distance: Int): T = east(-distance)
-        abstract fun north(distance: Int): T
-        fun south(distance: Int): T = north(-distance)
-        abstract fun right(degrees: Int): T
-        fun left(degrees: Int): T = right(-degrees)
-        abstract fun forward(distance: Int): T
+        abstract fun navigateEast(distance: Int): T
+        fun navigateWest(distance: Int): T = navigateEast(-distance)
+        abstract fun navigateNorth(distance: Int): T
+        fun navigateSouth(distance: Int): T = navigateNorth(-distance)
+        abstract fun rotateRight(degrees: Int): T
+        fun rotateLeft(degrees: Int): T = rotateRight(-degrees)
+        abstract fun goForward(distance: Int): T
     }
 
-    data class PositionWaypoint(override val coords: Coords, val waypoint: Coords) : Position<PositionWaypoint>() {
-        override fun east(distance: Int): PositionWaypoint = PositionWaypoint(coords, waypoint.goEast(distance))
-        override fun north(distance: Int): PositionWaypoint = PositionWaypoint(coords, waypoint.goNorth(distance))
-        override fun right(degrees: Int): PositionWaypoint = PositionWaypoint(coords, waypoint.rotate(degrees))
-        override fun forward(distance: Int): PositionWaypoint = PositionWaypoint(coords.moveBy(waypoint, distance), waypoint)
+    data class WaypointNavigator(override val coords: Coords, val waypoint: Coords) : Navigator<WaypointNavigator>() {
+        override fun navigateEast(distance: Int): WaypointNavigator = WaypointNavigator(coords, waypoint.goEast(distance))
+        override fun navigateNorth(distance: Int): WaypointNavigator = WaypointNavigator(coords, waypoint.goNorth(distance))
+        override fun rotateRight(degrees: Int): WaypointNavigator = WaypointNavigator(coords, waypoint.rotate(degrees))
+        override fun goForward(distance: Int): WaypointNavigator = WaypointNavigator(coords.moveBy(waypoint, distance), waypoint)
     }
 
-    data class PositionDirect(override val coords: Coords, val heading: Int) : Position<PositionDirect>() {
-        override fun east(distance: Int): PositionDirect = PositionDirect(coords.goEast(distance), heading)
-        override fun north(distance: Int): PositionDirect = PositionDirect(coords.goNorth(distance), heading)
-        override fun right(degrees: Int): PositionDirect = PositionDirect(coords, heading + degrees)
-        override fun forward(distance: Int): PositionDirect = when (this.heading % 360) {
-            0 -> north(distance)
-            90, -270 -> east(distance)
-            180, -180 -> south(distance)
-            270, -90 -> west(distance)
+    data class DirectNavigator(override val coords: Coords, val heading: Int) : Navigator<DirectNavigator>() {
+        override fun navigateEast(distance: Int): DirectNavigator = DirectNavigator(coords.goEast(distance), heading)
+        override fun navigateNorth(distance: Int): DirectNavigator = DirectNavigator(coords.goNorth(distance), heading)
+        override fun rotateRight(degrees: Int): DirectNavigator = DirectNavigator(coords, heading + degrees)
+        override fun goForward(distance: Int): DirectNavigator = when (this.heading % 360) {
+            0 -> navigateNorth(distance)
+            90, -270 -> navigateEast(distance)
+            180, -180 -> navigateSouth(distance)
+            270, -90 -> navigateWest(distance)
             else -> error("Invalid heading $heading")
         }
     }
 
-    private fun <T> navigateFrom(startingPosition: Position<T>): Position<T> where T : Position<T> = lines
+    private fun <T> navigateUsing(nav: Navigator<T>): Navigator<T> where T : Navigator<T> = lines
             .asSequence()
             .map(lineRegex::matchEntire)
             .requireNoNulls()
             .map(MatchResult::destructured)
             .map(MatchResult.Destructured::toList)
-            .fold(startingPosition) { pos, mr ->
+            .fold(nav) { pos, mr ->
                 val instruction = mr.first()
                 val arg = mr.last().toInt()
                 println(pos)
                 when (instruction) {
-                    "N" -> pos.north(arg)
-                    "E" -> pos.east(arg)
-                    "W" -> pos.west(arg)
-                    "S" -> pos.south(arg)
-                    "R" -> pos.right(arg)
-                    "L" -> pos.left(arg)
-                    "F" -> pos.forward(arg)
+                    "N" -> pos.navigateNorth(arg)
+                    "E" -> pos.navigateEast(arg)
+                    "W" -> pos.navigateWest(arg)
+                    "S" -> pos.navigateSouth(arg)
+                    "R" -> pos.rotateRight(arg)
+                    "L" -> pos.rotateLeft(arg)
+                    "F" -> pos.goForward(arg)
                     else -> error("Invalid instruction")
-
                 }
             }
 
-    fun part1(): Int = navigateFrom(startingPositionDirect).coords.manhattanDistanceFrom(startingCoords)
-    fun part2(): Int = navigateFrom(startingPositionWaypoint).coords.manhattanDistanceFrom(startingCoords)
+    fun part1(): Int = navigateUsing(DirectNavigator(startingCoords, 90)).coords.manhattanDistanceFrom(startingCoords)
+    fun part2(): Int = navigateUsing(WaypointNavigator(startingCoords, Coords(10, 1))).coords.manhattanDistanceFrom(startingCoords)
 }
