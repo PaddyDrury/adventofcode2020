@@ -39,5 +39,5 @@ First foray into AOC.
 | [Day 11: Seating System](https://adventofcode.com/2020/day/11)   | [kotlin](./src/main/kotlin/day11/Day11.kt)                                |
 | [Day 12: Rain Risk](https://adventofcode.com/2020/day/12)        | [kotlin](./src/main/kotlin/day12/Day12.kt)                                |
 | [Day 13: Shuttle Search](https://adventofcode.com/2020/day/13)   | [kotlin](./src/main/kotlin/day13/Day13.kt)                                |
-| [Day 13: Docking Data](https://adventofcode.com/2020/day/14)     | [kotlin](./src/main/kotlin/day14/Day14.kt)                                |
+| [Day 14: Docking Data](https://adventofcode.com/2020/day/14)     | [kotlin](./src/main/kotlin/day14/Day14.kt)                                |
 
