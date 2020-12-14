@@ -1,8 +1,6 @@
 package util
 
-import jdk.nashorn.internal.runtime.arrays.IteratorAction
 import org.paukov.combinatorics3.Generator
-import java.lang.NumberFormatException
 import java.util.function.Predicate
 
 fun <T> Iterable<T>.splitWhen(condition: Predicate<T>): List<List<T>> = this.fold(mutableListOf(mutableListOf<T>())) { acc, t ->
