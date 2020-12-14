@@ -40,14 +40,13 @@ fun interface Mask {
     fun andThen(after: Mask): Mask = Mask { v: Long -> after.applyTo(this.applyTo(v)) }
 }
 
-data class OrMask(val mask: Long): Mask {
-    override fun applyTo(value: Long):Long = value.or(mask)
+data class OrMask(val mask: Long) : Mask {
+    override fun applyTo(value: Long): Long = value.or(mask)
 }
 
-data class AndMask(val mask: Long):Mask {
-    override fun applyTo(value: Long):Long = value.and(mask)
+data class AndMask(val mask: Long) : Mask {
+    override fun applyTo(value: Long): Long = value.and(mask)
 }
-
 
 fun String.toMasks(): Mask = this.toOrMask().andThen(this.toAndMask())
 fun String.toOrMask(): OrMask = OrMask(this.replace('X', '0').toLong(2))
@@ -55,13 +54,13 @@ fun String.toAndMask(): AndMask = AndMask(this.replace('X', '1').toLong(2))
 
 fun String.toFloatingBitsMasks(): Pair<Mask, List<OrMask>> = Pair(this.toOrMask().andThen(this.floatingBitsToAndMask()), this.floatingBitsToOrMasks())
 fun String.floatingBitsToAndMask(): AndMask = AndMask(this.replace('0', '1').replace('X', '0').toLong(2))
-fun String.floatingBitsToOrMasks(): List<OrMask> = this.reversed().mapIndexedNotNull {index, char -> if(char == 'X') OrMask(1L shl index) else null }
+fun String.floatingBitsToOrMasks(): List<OrMask> = this.reversed().mapIndexedNotNull { index, char -> if (char == 'X') OrMask(1L shl index) else null }
 
 fun Pair<Mask, List<OrMask>>.findPossibleValuesfor(value: Long): List<Long> = Generator
         .subset(this.second)
         .simple()
-        .map{ masks ->
-            this.first.andThen(masks.fold(OrMask(0L) as Mask) { acc, mask ->
-            acc.andThen(mask)
-            })
+        .map { masks ->
+            masks.fold(first) { acc, mask ->
+                acc.andThen(mask)
+            }
         }.map { it.applyTo(value) }
