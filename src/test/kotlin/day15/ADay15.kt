@@ -7,6 +7,7 @@ class ADay15 {
     @Test
     fun testPart1132() {
         assertThat(Day15(mutableListOf(1,3,2)).part1()).isEqualTo(1)
+        assertThat(Day15Map(mutableListOf(1,3,2)).part1()).isEqualTo(1)
     }
     @Test
     fun testPart1213() {
@@ -31,5 +32,10 @@ class ADay15 {
     @Test
     fun part1() {
         assertThat(Day15(mutableListOf(17,1,3,16,19,0)).part1()).isEqualTo(694)
+    }
+
+    @Test
+    fun part2() {
+        assertThat(Day15Map(mutableListOf(17,1,3,16,19,0)).part2()).isEqualTo(694)
     }
 }
