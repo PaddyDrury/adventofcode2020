@@ -25,8 +25,8 @@ class Day16(inputFile: String) {
     fun parseNotes(): Notes = lines.splitWhen(String::isBlank).let { Notes(it.first().map(::parseField), parseTicket(it[1][1]), it.last().drop(1).map(::parseTicket)) }
 
     fun parseField(string: String): FieldDefinition {
-        val (name, range1Low, range1High, range2Low, range2High) = fieldRegex.matchEntire(string)!!.destructured
-        return FieldDefinition(name, range1Low.toInt()..range1High.toInt(), range2Low.toInt()..range2High.toInt())
+        val (name, lo1, hi1, lo2, hi2) = fieldRegex.matchEntire(string)!!.destructured
+        return FieldDefinition(name, lo1.toInt()..hi1.toInt(), lo2.toInt()..hi2.toInt())
     }
 
     fun parseTicket(string: String): Ticket = Ticket(string.split(',').map(String::toInt))
@@ -37,11 +37,7 @@ data class FieldDefinition(val name: String, val range1: IntRange, val range2: I
 }
 
 data class Ticket(val fields: List<Int>) {
-    fun findFieldsWhichArentValidForAny(fieldDefinitions: List<FieldDefinition>): List<Int>? = fields.filter { field ->
-        fieldDefinitions.none { definition ->
-            definition.validate(field)
-        }
-    }.let { if (it.isNotEmpty()) it else null }
+    fun findFieldsWhichArentValidForAny(fieldDefinitions: List<FieldDefinition>): List<Int>? = fields.filter { field -> fieldDefinitions.none { definition -> definition.validate(field) } }.let { if (it.isNotEmpty()) it else null }
 }
 
 data class Notes(val fieldDefinitions: List<FieldDefinition>, val myTicket: Ticket, val nearbyTickets: List<Ticket>) {
