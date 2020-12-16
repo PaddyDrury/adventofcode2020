@@ -9,8 +9,8 @@ class Day16(inputFile: String) {
 
     fun part1() = parseNotes().let { notes ->
         notes.nearbyTickets.map { ticket ->
-            ticket.findFieldsWhichArentValidForAny(notes.fieldDefinitions)
-        }.filterNotNull().sumOf { it.sum() }
+            ticket.findFieldsWhichAreNotValidForAny(notes.fieldDefinitions)
+        }.sumOf { it.sum() }
     }
 
     fun part2() = parseNotes().let { notes ->
@@ -37,7 +37,7 @@ data class FieldDefinition(val name: String, val range1: IntRange, val range2: I
 }
 
 data class Ticket(val fields: List<Int>) {
-    fun findFieldsWhichArentValidForAny(fieldDefinitions: List<FieldDefinition>): List<Int>? = fields.filter { field -> fieldDefinitions.none { definition -> definition.validate(field) } }.let { if (it.isNotEmpty()) it else null }
+    fun findFieldsWhichAreNotValidForAny(fieldDefinitions: List<FieldDefinition>): List<Int> = fields.filter { field -> fieldDefinitions.none { definition -> definition.validate(field) } }
 }
 
 data class Notes(val fieldDefinitions: List<FieldDefinition>, val myTicket: Ticket, val nearbyTickets: List<Ticket>) {
@@ -59,5 +59,5 @@ data class Notes(val fieldDefinitions: List<FieldDefinition>, val myTicket: Tick
         return possibleFieldPositions.mapValues { it.value.first() }
     }
 
-    private fun validTickets(): List<Ticket> = (nearbyTickets + myTicket).filter { it.findFieldsWhichArentValidForAny(fieldDefinitions) == null }
+    private fun validTickets(): List<Ticket> = (nearbyTickets + myTicket).filter { it.findFieldsWhichAreNotValidForAny(fieldDefinitions).isEmpty() }
 }
