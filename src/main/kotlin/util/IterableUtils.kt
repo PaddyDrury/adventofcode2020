@@ -25,3 +25,5 @@ fun Iterable<Long>.addMinToMax(): Long = this.minOrNull()!! + this.maxOrNull()!!
 fun <T> List<T>.sublistBetweenMinAndMaxOf(values: Iterable<Int>): List<T> = this.subList(values.minOrNull()!!, values.maxOrNull()!!)
 
 fun Iterable<Long>.subtractMinFromMax(): Long = this.maxOrNull()!! - this.minOrNull()!!
+
+fun <T> cartesianProduct(vararg range: Iterable<T>): Iterable<MutableList<T>> = Generator.cartesianProduct(*(range.map { it.toMutableList() }.toTypedArray()))
