@@ -42,4 +42,5 @@ First foray into AOC.
 | [Day 14: Docking Data](https://adventofcode.com/2020/day/14)           | [kotlin](./src/main/kotlin/day14/Day14.kt)                                       |
 | [Day 15: Rambunctious Recitation](https://adventofcode.com/2020/day/15)| [kotlin](./src/main/kotlin/day15/Day15.kt)                                       |
 | [Day 16: Ticket Translation](https://adventofcode.com/2020/day/16)     | [kotlin](./src/main/kotlin/day16/Day16.kt)                                       |
+| [Day 17: Conway Cubes](https://adventofcode.com/2020/day/17)           | [kotlin](./src/main/kotlin/day17/Day17.kt)                                       |
 
