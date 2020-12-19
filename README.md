@@ -43,4 +43,6 @@ First foray into AOC.
 | [Day 15: Rambunctious Recitation](https://adventofcode.com/2020/day/15)| [kotlin](./src/main/kotlin/day15/Day15.kt)                                       |
 | [Day 16: Ticket Translation](https://adventofcode.com/2020/day/16)     | [kotlin](./src/main/kotlin/day16/Day16.kt)                                       |
 | [Day 17: Conway Cubes](https://adventofcode.com/2020/day/17)           | [kotlin](./src/main/kotlin/day17/Day17.kt)                                       |
+| [Day 18: Operation Order](https://adventofcode.com/2020/day/18)        | [kotlin](./src/main/kotlin/day18/Day18.kt)                                       |
+| [Day 19: Monster Messages](https://adventofcode.com/2020/day/19)       | [kotlin](./src/main/kotlin/day19/Day19.kt)                                       |
 

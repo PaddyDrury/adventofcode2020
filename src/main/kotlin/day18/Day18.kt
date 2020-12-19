@@ -50,13 +50,13 @@ abstract class ExpressionEvaluator {
 }
 
 class LeftToRightOperatorPrecedenceExpressionEvaluator : ExpressionEvaluator() {
-    override fun doFinalise(deque: ArrayDeque<Long>): Long = deque.first()
-    override fun doAddition(deque: ArrayDeque<Long>, operand: Long) { deque.add(operand + deque.removeLast()) }
-    override fun doMultiply(deque: ArrayDeque<Long>, operand: Long) { deque.add(operand * deque.removeLast()) }
+    override fun doFinalise(operands: ArrayDeque<Long>): Long = operands.first()
+    override fun doAddition(operands: ArrayDeque<Long>, operand: Long) { operands.add(operand + operands.removeLast()) }
+    override fun doMultiply(operands: ArrayDeque<Long>, operand: Long) { operands.add(operand * operands.removeLast()) }
 }
 
 class PlusOperatorPrecedenceExpressionEvaluator : ExpressionEvaluator() {
-    override fun doFinalise(deque: ArrayDeque<Long>): Long = deque.fold(1) { acc, l -> acc * l }
-    override fun doAddition(deque: ArrayDeque<Long>, operand: Long) { deque.add(operand + deque.removeLast()) }
-    override fun doMultiply(deque: ArrayDeque<Long>, operand: Long) = deque.addLast(operand)
+    override fun doFinalise(operands: ArrayDeque<Long>): Long = operands.fold(1) { acc, l -> acc * l }
+    override fun doAddition(operands: ArrayDeque<Long>, operand: Long) { operands.add(operand + operands.removeLast()) }
+    override fun doMultiply(operands: ArrayDeque<Long>, operand: Long) = operands.addLast(operand)
 }
