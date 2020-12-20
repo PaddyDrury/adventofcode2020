@@ -16,6 +16,10 @@ fun <T> Iterable<T>.splitWhen(condition: Predicate<T>): List<List<T>> = this.fol
 
 fun <T> Collection<T>.combinations(length: Int): Iterable<List<T>> = Generator.combination(this).multi(length)
 
+fun <T> Collection<T>.permutations(length: Int): Iterable<List<T>> = Generator.combination(this).multi(length).flatMap { Generator.permutation(it).simple() }
+
+fun <T> Collection<T>.permutations() : Iterable<List<T>> = Generator.permutation(this).simple()
+
 fun Iterable<Int>.sumsToValue(value: Int): Boolean = this.sum() == value
 
 fun Iterable<Long>.sumsToValue(value: Long): Boolean = this.sum() == value
