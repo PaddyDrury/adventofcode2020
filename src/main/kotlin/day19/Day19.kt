@@ -17,23 +17,23 @@ class Day19(inputFile: String) {
     fun countMatchesOfRule0(): Int = messages.count { rules[0]!!.matches(it) }
 
     private fun parseRule(
-        ruleNum: Int,
+        id: Int,
         raw: Map<Int, String>,
         regexCache: MutableMap<Int, String>,
         depthCache: MutableMap<Int, Int>
     ): String {
-        if (regexCache.contains(ruleNum)) return regexCache[ruleNum]!!
-        if (depthCache.compute(ruleNum) { _, v -> (v ?: 0) + 1 }!! >= messages.maxOf(String::length)) return ""
-        val rule = when (raw[ruleNum]!!) {
+        if (regexCache.contains(id)) return regexCache[id]!!
+        if (depthCache.compute(id) { _, v -> (v ?: 0) + 1 }!! >= messages.maxOf(String::length)) return ""
+        val rule = when (raw[id]!!) {
             "\"a\"" -> "a"
             "\"b\"" -> "b"
-            else -> raw[ruleNum]!!.split(" ").map {
-                when (val nestedRuleNum = it.toIntOrNull()) {
-                    null -> it
-                    else -> parseRule(nestedRuleNum, raw, regexCache, depthCache)
+            else -> raw[id]!!.split(" ").map {
+                when (it) {
+                    "|" -> it
+                    else -> parseRule(it.toInt(), raw, regexCache, depthCache)
                 }
             }.joinToString("")
         }
-        return (if (rule.contains("|")) "($rule)" else rule).also { regexCache[ruleNum] = it }
+        return (if (rule.contains("|")) "($rule)" else rule).also { regexCache[id] = it }
     }
 }
