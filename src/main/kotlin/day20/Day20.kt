@@ -47,7 +47,7 @@ class Day20(inputFile: String) {
             }
         } while (unmatchedTiles.isNotEmpty())
 
-        val assembled = image.map { it.map { p -> p.second } }.assemble()
+        val assembled = image.map { it.map { p -> p.second.removeBorder() } }.assemble()
 
         assembled.print()
 
@@ -123,3 +123,5 @@ fun List<List<Grid>>.assemble(): Grid = this.map { it.joinHorizontal() }.joinVer
 fun List<Grid>.joinHorizontal(): Grid = this.reduce { acc, it -> acc.zip(it).map { it.first + it.second } }
 fun List<Grid>.joinVertical() = this.reduce { acc, it -> acc + it }
 fun Grid.countHashes() = this.sumOf { it.count { it == '#' } }
+
+fun Grid.removeBorder() = this.drop(1).dropLast(1).map { it.substring(1, it.length - 1) }
