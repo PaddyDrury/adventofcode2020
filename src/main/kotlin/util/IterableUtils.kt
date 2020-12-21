@@ -14,7 +14,9 @@ fun <T> Iterable<T>.splitWhen(condition: Predicate<T>): List<List<T>> = this.fol
     !it.isEmpty()
 }
 
-fun <T> Collection<T>.combinations(length: Int): Iterable<List<T>> = Generator.combination(this).multi(length)
+fun <T> Collection<T>.multiCombinations(length: Int): Iterable<List<T>> = Generator.combination(this).multi(length)
+
+fun <T> Collection<T>.simpleCombinations(length: Int): Iterable<List<T>> = Generator.combination(this).simple(length)
 
 fun <T> Collection<T>.permutations(length: Int): Iterable<List<T>> = Generator.combination(this).multi(length).flatMap { Generator.permutation(it).simple() }
 

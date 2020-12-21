@@ -12,7 +12,7 @@ class Day9(inputFile: String) {
             .windowed(preambleLength + 1)
             .first { window ->
                 window.take(preambleLength)
-                        .combinations(2)
+                        .multiCombinations(2)
                         .none { combo ->
                             combo.sumsToValue(window.last())
                         }
@@ -25,6 +25,6 @@ class Day9(inputFile: String) {
 fun List<Long>.findContiguousRangeSummingTo(value: Long) = this.sublistBetweenMinAndMaxOf(
         (this.takeWhile { it < value }.indices)
                 .toList()
-                .combinations(2)
+                .multiCombinations(2)
                 .first { this.sublistBetweenMinAndMaxOf(it).sumsToValue(value) }
 )
