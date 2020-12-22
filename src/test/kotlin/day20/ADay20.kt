@@ -12,6 +12,6 @@ class ADay20 {
 
     @Test
     fun testPart2() {
-        assertThat(Day20("inputFiles/day20/input.txt").part2()).isEqualTo(1)
+        assertThat(Day20("inputFiles/day20/input.txt").part2()).isEqualTo(2161)
     }
 }
