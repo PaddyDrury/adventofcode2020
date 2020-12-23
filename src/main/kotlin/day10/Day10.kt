@@ -10,34 +10,37 @@ class Day10(inputFile: String) {
     fun part2(): Long = countAdapterConfigurations()
 
     fun adapters(): List<Long> = lines.asSequence().map(String::toLong)
-            .sorted()
-            .toList()
+        .sorted()
+        .toList()
 
-    fun findDifferencesOf(value: Long): Int {
-        val chain = adapters().toMutableList()
+    fun findDifferencesOf(value: Long): Int = adapters().toMutableList().let { chain ->
         chain.add(0, 0)
         chain.add(chain.maxOrNull()!! + 3)
-        return chain.findDifferencesOf(value)
+        chain.findDifferencesOf(value)
     }
 
-    fun countAdapterConfigurations(): Long {
-        val adapters = adapters()
-        return memoisedCountConfigurationsBetween(0, adapters.maxOrNull()!!, adapters, mutableMapOf(adapters.maxOrNull()!! to 1))
+    private fun countAdapterConfigurations(): Long = adapters().let {
+        countConfigurationsBetween(
+            0,
+            it.maxOrNull()!!,
+            it,
+            mutableMapOf(it.maxOrNull()!! to 1)
+        )
     }
 
-    fun memoisedCountConfigurationsBetween(currentAdapter: Long, lastAdapter: Long, adapters: List<Long>, countCache: MutableMap<Long, Long>): Long {
-        countCache[currentAdapter] = countCache[currentAdapter] ?: countConfigurationsBetween(currentAdapter, lastAdapter, adapters, countCache)
-        return countCache[currentAdapter]!!
-    }
-
-    private fun countConfigurationsBetween(currentAdapter: Long, lastAdapter: Long, adapters: List<Long>, countCache: MutableMap<Long, Long>) =
-            (currentAdapter + 1L..currentAdapter + 3L)
-                    .filter(adapters::contains)
-                    .fold(0L) { acc, adapter ->
-                        acc + memoisedCountConfigurationsBetween(adapter, lastAdapter, adapters, countCache)
-                    }
+    private fun countConfigurationsBetween(
+        currentAdapter: Long,
+        lastAdapter: Long,
+        adapters: List<Long>,
+        countCache: MutableMap<Long, Long>
+    ): Long =
+        countCache[currentAdapter] ?: (currentAdapter + 1L..currentAdapter + 3L)
+            .filter(adapters::contains)
+            .fold(0L) { acc, adapter ->
+                acc + countConfigurationsBetween(adapter, lastAdapter, adapters, countCache)
+            }.also { countCache[currentAdapter] = it }
 }
 
 fun List<Long>.findDifferencesOf(value: Long): Int = this.sorted()
-        .windowed(2)
-        .count { (it.last() - it.first()) == value }
+    .windowed(2)
+    .count { (it.last() - it.first()) == value }

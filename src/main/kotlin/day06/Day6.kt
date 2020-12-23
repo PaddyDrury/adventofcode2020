@@ -6,7 +6,7 @@ import util.chunkWhen
 class Day6(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
 
-    fun part1(): Long = lines.chunkWhen { it.isBlank() }.map { it.joinToString(separator = "") }.map { it.countDistinct() }.sum()
+    fun part1(): Long = lines.chunkWhen { it.isBlank() }.map { it.joinToString("") }.map { it.countDistinct() }.sum()
     fun part2(): Int = lines.chunkWhen { it.isBlank() }.map { it.intersectingChars().size }.sum()
 }
 

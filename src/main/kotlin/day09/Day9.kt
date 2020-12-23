@@ -9,22 +9,23 @@ class Day9(inputFile: String) {
     fun part2(): Long = computeEncryptionWeakness(25)
 
     fun findFirstInvalid(preambleLength: Int): Long = lines.map { it.toLong() }
-            .windowed(preambleLength + 1)
-            .first { window ->
-                window.take(preambleLength)
-                        .multiCombinations(2)
-                        .none { combo ->
-                            combo.sumsToValue(window.last())
-                        }
-            }
-            .last()
+        .windowed(preambleLength + 1)
+        .first { window ->
+            window.take(preambleLength)
+                .multiCombinations(2)
+                .none { combo ->
+                    combo.sumsToValue(window.last())
+                }
+        }
+        .last()
 
-    fun computeEncryptionWeakness(preambleLength: Int): Long = lines.map { it.toLong() }.findContiguousRangeSummingTo(findFirstInvalid(preambleLength)).addMinToMax()
+    fun computeEncryptionWeakness(preambleLength: Int): Long =
+        lines.map { it.toLong() }.findContiguousRangeSummingTo(findFirstInvalid(preambleLength)).addMinToMax()
 }
 
 fun List<Long>.findContiguousRangeSummingTo(value: Long) = this.sublistBetweenMinAndMaxOf(
-        (this.takeWhile { it < value }.indices)
-                .toList()
-                .multiCombinations(2)
-                .first { this.sublistBetweenMinAndMaxOf(it).sumsToValue(value) }
+    (this.takeWhile { it < value }.indices)
+        .toList()
+        .multiCombinations(2)
+        .first { this.sublistBetweenMinAndMaxOf(it).sumsToValue(value) }
 )

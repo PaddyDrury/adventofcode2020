@@ -24,13 +24,13 @@ class Day4(inputFile: String) {
         fun hasValidIssueYear(): Boolean = details["iyr"]?.toIntOrNull() in 2010..2020
         fun hasValidExpirationYear(): Boolean = details["eyr"]?.toIntOrNull() in 2020..2030
         fun hasValidHeight(): Boolean {
-            var matchResult = """^([0-9]{2,3})(in|cm)${'$'}""".toRegex().find(details["hgt"] ?: "")
+            val matchResult = """^([0-9]{2,3})(in|cm)${'$'}""".toRegex().find(details["hgt"] ?: "")
             if (null != matchResult) {
                 val (value, unit) = matchResult.destructured
-                when (unit) {
-                    "cm" -> return value.toIntOrNull() in 150..193
-                    "in" -> return value.toIntOrNull() in 59..76
-                    else -> return false
+                return when (unit) {
+                    "cm" -> value.toIntOrNull() in 150..193
+                    "in" -> value.toIntOrNull() in 59..76
+                    else -> false
                 }
             } else {
                 return false

@@ -7,7 +7,7 @@ class Day7(inputFile: String) {
     private val lineRegex = """^([a-z]+ [a-z]+) bags contain (.*)${'$'}""".toRegex()
     private val bagRegex = """(\d)+\s([a-z]+\s[a-z]+)""".toRegex()
 
-    class Bag(val colour: String, val children: MutableMap<Bag, Int>) {
+    class Bag(val colour: String, private val children: MutableMap<Bag, Int>) {
         fun containsBagOfColour(colour: String): Boolean = children.keys.map { it.colour }.contains(colour) || children.keys.any { it.containsBagOfColour(colour) }
 
         fun countChildBags(): Long = children.entries.fold(0L) { acc, e ->

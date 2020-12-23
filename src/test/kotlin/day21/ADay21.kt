@@ -12,7 +12,7 @@ class ADay21 {
 
     @Test
     fun part1() {
-        assertThat(Day21("inputFiles/day21/input.txt").part1()).isEqualTo(5)
+        assertThat(Day21("inputFiles/day21/input.txt").part1()).isEqualTo(2262)
     }
     @Test
     fun part2() {
