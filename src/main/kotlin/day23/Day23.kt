@@ -1,6 +1,6 @@
 package day23
 
-typealias Cups = IntArray
+typealias Circle = IntArray
 
 class Day23(val input: String) {
     val startingCups = input.map(Char::toString).map(String::toInt)
@@ -31,23 +31,23 @@ class Day23(val input: String) {
         return cupsToTheRightOf(1, cups, 2).fold(1L) { acc, i -> acc * i }
     }
 
-    fun makeMoves(numMoves: Int, firstCup: Int, cups: Cups, min: Int, max: Int): Cups {
+    fun makeMoves(numMoves: Int, firstCup: Int, circle: Circle, min: Int, max: Int): Circle {
         var currentCup = firstCup
         repeat(numMoves) {
-            currentCup = makeMove(cups, currentCup, min, max)
+            currentCup = makeMove(circle, currentCup, min, max)
         }
-        return cups
+        return circle
     }
 
-    fun makeMove(cups: Cups, currentCup: Int, min: Int, max: Int): Int {
-        val removedCups = cupsToTheRightOf(currentCup, cups, 3)
+    fun makeMove(circle: Circle, currentCup: Int, min: Int, max: Int): Int {
+        val removedCups = cupsToTheRightOf(currentCup, circle, 3)
         val destinationCup = destinationCup(currentCup, removedCups, min, max)
-        cups.setNextCup(currentCup, cups.getNextCup(removedCups.last()))
-        cups.insertAfter(destinationCup, removedCups)
-        return cups.getNextCup(currentCup)
+        circle.setNextCup(currentCup, circle.getNextCup(removedCups.last()))
+        circle.insertAfter(destinationCup, removedCups)
+        return circle.getNextCup(currentCup)
     }
 
-    fun cupsToTheRightOf(currentCup: Int, cups: Cups, numCups: Int): List<Int> = generateSequence(cups.getNextCup(currentCup)) { cups.getNextCup(it) }.take(numCups).toList()
+    fun cupsToTheRightOf(currentCup: Int, circle: Circle, numCups: Int): List<Int> = generateSequence(circle.getNextCup(currentCup)) { circle.getNextCup(it) }.take(numCups).toList()
 
     fun destinationCup(currentCup: Int, pickedCups: List<Int>, min: Int, max: Int): Int {
         var destCup = currentCup
@@ -58,14 +58,14 @@ class Day23(val input: String) {
     }
 }
 
-fun Cups.insertAfter(cup: Int, cups: List<Int>) = this.getNextCup(cup).let { next ->
+fun Circle.insertAfter(cup: Int, cups: List<Int>) = this.getNextCup(cup).let { next ->
     this.setNextCup(cup, cups.first())
     this.setNextCup(cups.last(), next)
 }
-fun Cups.getNextCup(cup: Int): Int = this[cup - 1]
-fun Cups.setNextCup(cup: Int, nextCup: Int) = let {this[cup - 1] = nextCup }
+fun Circle.getNextCup(cup: Int): Int = this[cup - 1]
+fun Circle.setNextCup(cup: Int, nextCup: Int) = let {this[cup - 1] = nextCup }
 
-fun List<Int>.toCircle(): IntArray = this.mapIndexed { idx, it ->
+fun List<Int>.toCircle(): Circle = this.mapIndexed { idx, it ->
     val nextIndex = idx + 1
     it to this[if (nextIndex < this.size) nextIndex else 0]
 }.let {
