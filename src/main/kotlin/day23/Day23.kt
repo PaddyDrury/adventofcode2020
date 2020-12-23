@@ -6,16 +6,17 @@ class Day23(val input: String) {
     val startingCups = input.map(Char::toString).map(String::toInt)
 
     fun part1(): String = makeMoves(
-    100,
-    startingCups.first(),
-    startingCups.toCircle(),
-    startingCups.minOrNull()!!,
-    startingCups.maxOrNull()!!
-).getNextCups(1, startingCups.size - 1).joinToString("")
+        100,
+        startingCups.first(),
+        startingCups.toCircle(),
+        startingCups.minOrNull()!!,
+        startingCups.maxOrNull()!!
+    ).getNextCups(1, startingCups.size - 1).joinToString("")
 
     fun part2(): Long {
         val circle = (startingCups + (10..1000000)).toCircle()
-        makeMoves(10000000,
+        makeMoves(
+            10000000,
             startingCups.first(),
             circle,
             1,
@@ -52,15 +53,17 @@ fun Circle.insertAfter(cup: Int, cups: List<Int>) = this.getNextCup(cup).let { n
     this.setNextCup(cup, cups.first())
     this.setNextCup(cups.last(), next)
 }
+
 fun Circle.getNextCup(cup: Int): Int = this[cup - 1]
-fun Circle.setNextCup(cup: Int, nextCup: Int) = let {this[cup - 1] = nextCup }
-fun Circle.getNextCups(cup: Int, numCups: Int): List<Int> = generateSequence(this.getNextCup(cup)) { this.getNextCup(it) }.take(numCups).toList()
+fun Circle.setNextCup(cup: Int, nextCup: Int) = let { this[cup - 1] = nextCup }
+fun Circle.getNextCups(cup: Int, numCups: Int): List<Int> =
+    generateSequence(this.getNextCup(cup)) { this.getNextCup(it) }.take(numCups).toList()
 
 fun List<Int>.toCircle(): Circle = this.mapIndexed { idx, it ->
     val nextIndex = idx + 1
     it to this[if (nextIndex < this.size) nextIndex else 0]
 }.let {
     val arr = IntArray(it.size)
-    it.forEach { p -> arr[p.first - 1] = p.second}
+    it.forEach { p -> arr[p.first - 1] = p.second }
     arr
 }
