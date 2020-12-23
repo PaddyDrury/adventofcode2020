@@ -1,7 +1,7 @@
 package day22
 
-import util.readFile
 import util.chunkWhen
+import util.readFile
 
 typealias Deck = List<Int>
 

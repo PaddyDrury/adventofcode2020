@@ -62,7 +62,7 @@ fun List<Int>.toCircle(): Circle = this.mapIndexed { idx, it ->
     val nextIndex = idx + 1
     it to this[if (nextIndex < this.size) nextIndex else 0]
 }.let {
-    val arr = IntArray(it.size)
-    it.forEach { p -> arr[p.first - 1] = p.second }
-    arr
+    val circle = Circle(it.size)
+    it.forEach { p -> circle.setNextCup(p.first, p.second) }
+    circle
 }
