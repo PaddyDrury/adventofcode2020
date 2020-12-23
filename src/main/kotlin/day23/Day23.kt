@@ -1,49 +1,68 @@
 package day23
 
-typealias Cups = List<Int>
+typealias Cups = MutableMap<Int, Int>
 
 class Day23(val input: String) {
     val startingCups = input.map(Char::toString).map(String::toInt)
 
-    fun part1(): String = cupsAfter(1, makeMoves(100, startingCups))
+    fun part1(): String = makeMoves(
+        100,
+        startingCups.first(),
+        startingCups.toCircularMap().toMutableMap(),
+        startingCups.minOrNull()!!,
+        startingCups.maxOrNull()!!
+    ).let { cups ->
+        cupsToTheRightOf(1, cups, startingCups.size - 1)
+    }.joinToString("")
 
-    fun part2(): Long = makeMoves(10000000,
-        startingCups + ((startingCups.maxOrNull()!! + 1)..1000000).toList()).let {
-        val indexOf1 = it.indexOf(1)
-        it[indexOf1 + 1].toLong() * it[indexOf1 + 2].toLong()
+    fun part2(): Long {
+        val cups = startingCups.toCircularMap().toMutableMap()
+        cups.putAll((10..1000000).map { it to it+1 }.toMap())
+        cups[startingCups.last()] = 10
+        cups[1000000] = startingCups.first()
+        makeMoves(10000000,
+            startingCups.first(),
+            cups,
+            1,
+            1000000
+        )
+        return cupsToTheRightOf(1, cups, 2).fold(1L) { acc, i -> acc * i }
     }
 
-    fun cupsAfter(cup: Int, cups: Cups): String {
-        return (cups.dropWhile { it != cup }.drop(1) + cups.takeWhile { it != cup }).joinToString("")
-    }
-
-    fun makeMoves(numMoves: Int, startingCups: Cups): Cups {
-        var cups = startingCups
+    fun makeMoves(numMoves: Int, firstCup: Int, cups: Cups, min: Int, max: Int): Cups {
+        var currentCup = firstCup
         repeat(numMoves) {
-            if(it % 10 == 0) {
-                println("made $it moves")
-            }
-            cups = makeMove(cups)
+            currentCup = makeMove(cups, currentCup, min, max)
         }
         return cups
     }
 
-    fun makeMove(cups: Cups): Cups {
-        val currentCup = cups.take(1).first()
-        val pickedUpCups = cups.take(4).drop(1)
-        val remainingCups = cups.drop(4).toMutableList()
-        val destinationCup = findDestinationCup(currentCup, remainingCups)
-        remainingCups.addAll(remainingCups.indexOf(destinationCup) + 1, pickedUpCups)
-        remainingCups.add(currentCup)
-        return remainingCups
+    fun makeMove(cups: Cups, currentCup: Int, min: Int, max: Int): Int {
+        val removedCups = cupsToTheRightOf(currentCup, cups, 3)
+        val destinationCup = destinationCup(currentCup, removedCups, min, max)
+        cups[currentCup] = cups[removedCups.last()]!!
+        insertAfter(destinationCup, removedCups, cups)
+        return cups[currentCup]!!
     }
 
-    fun findDestinationCup(currentCup: Int, remainingCups: Cups): Int {
-        var destinationCup = currentCup
+    fun insertAfter(cup: Int, cupsToInsert: List<Int>, cups: Cups) {
+        val nextCup = cups[cup]!!
+        cups[cup] = cupsToInsert.first()
+        cups[cupsToInsert.last()] = nextCup
+    }
+
+    fun cupsToTheRightOf(currentCup: Int, cups: Cups, numCups: Int): List<Int> = generateSequence(cups[currentCup]) { cups[it]!! }.take(numCups).toList()
+
+    fun destinationCup(currentCup: Int, pickedCups: List<Int>, min: Int, max: Int): Int {
+        var destCup = currentCup
         do {
-            destinationCup--
-        } while (!remainingCups.contains(destinationCup) && remainingCups.any { it > destinationCup })
-        return if(remainingCups.contains(destinationCup)) destinationCup else remainingCups.maxOrNull()!!
+            if (--destCup < min) destCup = max
+        } while (destCup in pickedCups)
+        return destCup
     }
-
 }
+
+fun <T> List<T>.toCircularMap(): Map<T, T> = this.mapIndexed { idx, it ->
+    val nextIndex = idx + 1
+    it to this[if (nextIndex < this.size) nextIndex else 0]!!
+}.toMap()

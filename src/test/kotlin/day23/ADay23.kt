@@ -18,4 +18,9 @@ class ADay23 {
     fun testPart2() {
         assertThat(Day23("389125467").part2()).isEqualTo(149245887792)
     }
+
+    @Test
+    fun part2() {
+        assertThat(Day23("418976235").part2()).isEqualTo(563362809504)
+    }
 }
