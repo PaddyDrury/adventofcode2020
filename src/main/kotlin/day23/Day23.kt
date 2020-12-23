@@ -16,12 +16,7 @@ class Day23(val input: String) {
     }.joinToString("")
 
     fun part2(): Long {
-        val circle = IntArray(1000000) { it + 2}
-        startingCups.toCircle().forEachIndexed { idx, it ->
-            circle[idx] = it
-        }
-        circle.setNextCup(startingCups.last(), 10)
-        circle.setNextCup(1000000, startingCups.first())
+        val circle = (startingCups + (10..1000000)).toCircle()
         makeMoves(10000000,
             startingCups.first(),
             circle,
