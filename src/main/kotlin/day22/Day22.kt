@@ -1,14 +1,14 @@
 package day22
 
 import util.readFile
-import util.splitWhen
+import util.chunkWhen
 
 typealias Deck = List<Int>
 
 class Day22(inputFile: String) {
     private val lines = readFile(inputFile)
-    private val deck1 = lines.splitWhen(String::isBlank).first().drop(1).map(String::toInt).toMutableList()
-    private val deck2 = lines.splitWhen(String::isBlank).last().drop(1).map(String::toInt).toMutableList()
+    private val deck1 = lines.chunkWhen(String::isBlank).first().drop(1).map(String::toInt).toMutableList()
+    private val deck2 = lines.chunkWhen(String::isBlank).last().drop(1).map(String::toInt).toMutableList()
 
     fun part1(): Int = playCombat(deck1, deck2) { card1, _, card2, _ ->
         whoWinsRoundNormal(card1, card2)

@@ -53,7 +53,6 @@ fun Circle.insertAfter(cup: Int, cups: List<Int>) = this.getNextCup(cup).let { n
     this.setNextCup(cup, cups.first())
     this.setNextCup(cups.last(), next)
 }
-
 fun Circle.getNextCup(cup: Int): Int = this[cup - 1]
 fun Circle.setNextCup(cup: Int, nextCup: Int) = let { this[cup - 1] = nextCup }
 fun Circle.getNextCups(cup: Int, numCups: Int): List<Int> =

@@ -1,7 +1,7 @@
 package day04
 
 import util.readFile
-import util.splitWhen
+import util.chunkWhen
 
 class Day4(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
@@ -56,7 +56,7 @@ class Day4(inputFile: String) {
 
     fun part1(): Int = passports().count { it.hasRequiredFields() }
     fun part2(): Int = passports().count { it.isValid() }
-    fun passports(): List<Passport> = lines.splitWhen { it.isBlank() }.map {
+    fun passports(): List<Passport> = lines.chunkWhen { it.isBlank() }.map {
         it.joinToString(separator = " ")
     }.map {
         detailsFromLine(it)

@@ -3,7 +3,7 @@ package util
 import org.paukov.combinatorics3.Generator
 import java.util.function.Predicate
 
-fun <T> Iterable<T>.splitWhen(condition: Predicate<T>): List<List<T>> = this.fold(mutableListOf(mutableListOf<T>())) { acc, t ->
+fun <T> Iterable<T>.chunkWhen(condition: Predicate<T>): List<List<T>> = this.fold(mutableListOf(mutableListOf<T>())) { acc, t ->
     if (condition.test(t)) {
         acc.add(mutableListOf())
     } else {

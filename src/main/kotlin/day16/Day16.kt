@@ -1,7 +1,7 @@
 package day16
 
 import util.readFile
-import util.splitWhen
+import util.chunkWhen
 
 class Day16(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
@@ -22,7 +22,7 @@ class Day16(inputFile: String) {
         }.fold(1L) { acc, i -> acc * i }
     }
 
-    fun parseNotes(): Notes = lines.splitWhen(String::isBlank).let { Notes(it.first().map(::parseField), parseTicket(it[1][1]), it.last().drop(1).map(::parseTicket)) }
+    fun parseNotes(): Notes = lines.chunkWhen(String::isBlank).let { Notes(it.first().map(::parseField), parseTicket(it[1][1]), it.last().drop(1).map(::parseTicket)) }
 
     fun parseField(string: String): FieldDefinition {
         val (name, lo1, hi1, lo2, hi2) = fieldRegex.matchEntire(string)!!.destructured

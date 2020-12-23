@@ -1,14 +1,14 @@
 package day19
 
 import util.readFile
-import util.splitWhen
+import util.chunkWhen
 
 class Day19(inputFile: String) {
     private val lines: List<String> = readFile(inputFile)
-    private val messages = lines.splitWhen(String::isBlank).last()
+    private val messages = lines.chunkWhen(String::isBlank).last()
 
-    fun part1(): Int = toRules(lines.splitWhen(String::isBlank).first()).let { rules -> messages.count { rules[0]!!.matches(it) } }
-    fun part2(): Int = toRules(lines.splitWhen(String::isBlank).first().map {
+    fun part1(): Int = toRules(lines.chunkWhen(String::isBlank).first()).let { rules -> messages.count { rules[0]!!.matches(it) } }
+    fun part2(): Int = toRules(lines.chunkWhen(String::isBlank).first().map {
         when {
             it.startsWith("8:") -> "8: 42 | 42 8"
             it.startsWith("11:") -> "11: 42 31 | 42 11 31"
