@@ -58,11 +58,8 @@ fun Circle.setNextCup(cup: Int, nextCup: Int) = let { this[cup - 1] = nextCup }
 fun Circle.getNextCups(cup: Int, numCups: Int): List<Int> =
     generateSequence(this.getNextCup(cup)) { this.getNextCup(it) }.take(numCups).toList()
 
-fun List<Int>.toCircle(): Circle = this.mapIndexed { idx, it ->
+fun List<Int>.toCircle(): Circle = this.foldIndexed(Circle(this.size)) { idx, circle, it ->
     val nextIndex = idx + 1
-    it to this[if (nextIndex < this.size) nextIndex else 0]
-}.let {
-    val circle = Circle(it.size)
-    it.forEach { p -> circle.setNextCup(p.first, p.second) }
+    circle.setNextCup(it, this[if (nextIndex < this.size) nextIndex else 0])
     circle
 }
