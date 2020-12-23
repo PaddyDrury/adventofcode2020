@@ -6,14 +6,12 @@ class Day23(val input: String) {
     val startingCups = input.map(Char::toString).map(String::toInt)
 
     fun part1(): String = makeMoves(
-        100,
-        startingCups.first(),
-        startingCups.toCircle(),
-        startingCups.minOrNull()!!,
-        startingCups.maxOrNull()!!
-    ).let { circle ->
-        circle.getNextCups(1, startingCups.size - 1)
-    }.joinToString("")
+    100,
+    startingCups.first(),
+    startingCups.toCircle(),
+    startingCups.minOrNull()!!,
+    startingCups.maxOrNull()!!
+).getNextCups(1, startingCups.size - 1).joinToString("")
 
     fun part2(): Long {
         val circle = (startingCups + (10..1000000)).toCircle()
@@ -26,7 +24,7 @@ class Day23(val input: String) {
         return circle.getNextCups(1, 2).fold(1L) { acc, i -> acc * i }
     }
 
-    fun makeMoves(numMoves: Int, firstCup: Int, circle: Circle, min: Int, max: Int): Circle {
+    private fun makeMoves(numMoves: Int, firstCup: Int, circle: Circle, min: Int, max: Int): Circle {
         var currentCup = firstCup
         repeat(numMoves) {
             currentCup = makeMove(circle, currentCup, min, max)
@@ -34,15 +32,14 @@ class Day23(val input: String) {
         return circle
     }
 
-    fun makeMove(circle: Circle, currentCup: Int, min: Int, max: Int): Int {
+    private fun makeMove(circle: Circle, currentCup: Int, min: Int, max: Int): Int {
         val removedCups = circle.getNextCups(currentCup, 3)
-        val destinationCup = destinationCup(currentCup, removedCups, min, max)
         circle.setNextCup(currentCup, circle.getNextCup(removedCups.last()))
-        circle.insertAfter(destinationCup, removedCups)
+        circle.insertAfter(destinationCup(currentCup, removedCups, min, max), removedCups)
         return circle.getNextCup(currentCup)
     }
 
-    fun destinationCup(currentCup: Int, pickedCups: List<Int>, min: Int, max: Int): Int {
+    private fun destinationCup(currentCup: Int, pickedCups: List<Int>, min: Int, max: Int): Int {
         var destCup = currentCup
         do {
             if (--destCup < min) destCup = max
