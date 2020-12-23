@@ -22,14 +22,14 @@ class Day22(inputFile: String) {
         }
 
     fun gameOfCombat(deck1: Deck, deck2: Deck, whoWins: (Int, Deck, Int, Deck) -> Player): Pair<Player, Deck> {
-        val previousDecks = mutableListOf<Pair<Deck, Deck>>()
+        val history = mutableListOf<Pair<Deck, Deck>>()
         val player1Deck = deck1.toMutableList()
         val player2Deck = deck2.toMutableList()
         while (player1Deck.isNotEmpty() && player2Deck.isNotEmpty()) {
-            if (previousDecks.contains(Pair(player1Deck, player2Deck))) {
-                return Pair(Player.PLAYER_1, player1Deck)
+            if (history.contains(player1Deck to player2Deck)) {
+                return Player.PLAYER_1 to player1Deck
             }
-            previousDecks.add(Pair(player1Deck.toList(), player2Deck.toList()))
+            history.add(player1Deck.toList() to player2Deck.toList())
             val player1Card = player1Deck.removeFirst()
             val player2Card = player2Deck.removeFirst()
             when (whoWins(player1Card, player1Deck, player2Card, player2Deck)) {
@@ -43,7 +43,7 @@ class Day22(inputFile: String) {
                 }
             }
         }
-        return if (player1Deck.isNotEmpty()) Pair(Player.PLAYER_1, player1Deck) else Pair(Player.PLAYER_2, player2Deck)
+        return if (player1Deck.isNotEmpty()) Player.PLAYER_1 to player1Deck else Player.PLAYER_2 to player2Deck
     }
 
     private fun whoWinsRoundRecursive(card1: Int, deck1: Deck, card2: Int, deck2: Deck): Player =
