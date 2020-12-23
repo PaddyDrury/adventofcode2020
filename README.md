@@ -45,4 +45,8 @@ First foray into AOC.
 | [Day 17: Conway Cubes](https://adventofcode.com/2020/day/17)           | [kotlin](./src/main/kotlin/day17/Day17.kt)                                       |
 | [Day 18: Operation Order](https://adventofcode.com/2020/day/18)        | [kotlin](./src/main/kotlin/day18/Day18.kt)                                       |
 | [Day 19: Monster Messages](https://adventofcode.com/2020/day/19)       | [kotlin](./src/main/kotlin/day19/Day19.kt)                                       |
+| [Day 20: Jurassic Jigsaw](https://adventofcode.com/2020/day/20)        | [kotlin](./src/main/kotlin/day20/Day20.kt)                                       |
+| [Day 21: Allergen Assessment](https://adventofcode.com/2020/day/21)    | [kotlin](./src/main/kotlin/day21/Day21.kt)                                       |
+| [Day 22: Crab Combat](https://adventofcode.com/2020/day/22)            | [kotlin](./src/main/kotlin/day22/Day22.kt)                                       |
+| [Day 23: Crab Cups](https://adventofcode.com/2020/day/23)              | [kotlin](./src/main/kotlin/day23/Day23.kt)                                       |
 
