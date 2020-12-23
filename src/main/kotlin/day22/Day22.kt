@@ -10,18 +10,18 @@ class Day22(inputFile: String) {
     private val deck1 = lines.splitWhen(String::isBlank).first().drop(1).map(String::toInt).toMutableList()
     private val deck2 = lines.splitWhen(String::isBlank).last().drop(1).map(String::toInt).toMutableList()
 
-    fun part1(): Int = gameOfCombat(deck1, deck2) { card1, _, card2, _ ->
+    fun part1(): Int = playCombat(deck1, deck2) { card1, _, card2, _ ->
         whoWinsRoundNormal(card1, card2)
     }.second.reversed().reduceIndexed { index, acc, value ->
         acc + (value * (index + 1))
     }
 
-    fun part2(): Int = gameOfCombat(deck1, deck2, ::whoWinsRoundRecursive)
+    fun part2(): Int = playCombat(deck1, deck2, ::whoWinsRoundRecursive)
         .second.reversed().reduceIndexed { index, acc, value ->
             acc + (value * (index + 1))
         }
 
-    fun gameOfCombat(deck1: Deck, deck2: Deck, whoWins: (Int, Deck, Int, Deck) -> Player): Pair<Player, Deck> {
+    fun playCombat(deck1: Deck, deck2: Deck, whoWins: (Int, Deck, Int, Deck) -> Player): Pair<Player, Deck> {
         val history = mutableListOf<Pair<Deck, Deck>>()
         val player1Deck = deck1.toMutableList()
         val player2Deck = deck2.toMutableList()
@@ -47,7 +47,7 @@ class Day22(inputFile: String) {
     }
 
     private fun whoWinsRoundRecursive(card1: Int, deck1: Deck, card2: Int, deck2: Deck): Player =
-        if (deck1.size >= card1 && deck2.size >= card2) gameOfCombat(
+        if (deck1.size >= card1 && deck2.size >= card2) playCombat(
             deck1.take(card1),
             deck2.take(card2),
             ::whoWinsRoundRecursive
