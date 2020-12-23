@@ -1,6 +1,6 @@
 package day23
 
-typealias Cups = MutableMap<Int, Int>
+typealias Cups = IntArray
 
 class Day23(val input: String) {
     val startingCups = input.map(Char::toString).map(String::toInt)
@@ -8,7 +8,7 @@ class Day23(val input: String) {
     fun part1(): String = makeMoves(
         100,
         startingCups.first(),
-        startingCups.toCircularMap().toMutableMap(),
+        startingCups.toCircle(),
         startingCups.minOrNull()!!,
         startingCups.maxOrNull()!!
     ).let { cups ->
@@ -16,10 +16,12 @@ class Day23(val input: String) {
     }.joinToString("")
 
     fun part2(): Long {
-        val cups = startingCups.toCircularMap().toMutableMap()
-        cups.putAll((10..1000000).map { it to it+1 }.toMap())
-        cups[startingCups.last()] = 10
-        cups[1000000] = startingCups.first()
+        val cups = IntArray(1000000) { it + 2}
+        startingCups.toCircle().forEachIndexed { idx, it ->
+            cups[idx] = it
+        }
+        cups.setNextCup(startingCups.last(), 10)
+        cups.setNextCup(1000000, startingCups.first())
         makeMoves(10000000,
             startingCups.first(),
             cups,
@@ -40,18 +42,12 @@ class Day23(val input: String) {
     fun makeMove(cups: Cups, currentCup: Int, min: Int, max: Int): Int {
         val removedCups = cupsToTheRightOf(currentCup, cups, 3)
         val destinationCup = destinationCup(currentCup, removedCups, min, max)
-        cups[currentCup] = cups[removedCups.last()]!!
-        insertAfter(destinationCup, removedCups, cups)
-        return cups[currentCup]!!
+        cups.setNextCup(currentCup, cups.getNextCup(removedCups.last()))
+        cups.insertAfter(destinationCup, removedCups)
+        return cups.getNextCup(currentCup)
     }
 
-    fun insertAfter(cup: Int, cupsToInsert: List<Int>, cups: Cups) {
-        val nextCup = cups[cup]!!
-        cups[cup] = cupsToInsert.first()
-        cups[cupsToInsert.last()] = nextCup
-    }
-
-    fun cupsToTheRightOf(currentCup: Int, cups: Cups, numCups: Int): List<Int> = generateSequence(cups[currentCup]) { cups[it]!! }.take(numCups).toList()
+    fun cupsToTheRightOf(currentCup: Int, cups: Cups, numCups: Int): List<Int> = generateSequence(cups.getNextCup(currentCup)) { cups.getNextCup(it) }.take(numCups).toList()
 
     fun destinationCup(currentCup: Int, pickedCups: List<Int>, min: Int, max: Int): Int {
         var destCup = currentCup
@@ -62,7 +58,18 @@ class Day23(val input: String) {
     }
 }
 
-fun <T> List<T>.toCircularMap(): Map<T, T> = this.mapIndexed { idx, it ->
+fun Cups.insertAfter(cup: Int, cups: List<Int>) = this.getNextCup(cup).let { next ->
+    this.setNextCup(cup, cups.first())
+    this.setNextCup(cups.last(), next)
+}
+fun Cups.getNextCup(cup: Int): Int = this[cup - 1]
+fun Cups.setNextCup(cup: Int, nextCup: Int) = let {this[cup - 1] = nextCup }
+
+fun List<Int>.toCircle(): IntArray = this.mapIndexed { idx, it ->
     val nextIndex = idx + 1
-    it to this[if (nextIndex < this.size) nextIndex else 0]!!
-}.toMap()
+    it to this[if (nextIndex < this.size) nextIndex else 0]
+}.let {
+    val arr = IntArray(it.size)
+    it.forEach { p -> arr[p.first - 1] = p.second}
+    arr
+}
