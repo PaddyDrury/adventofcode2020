@@ -18,7 +18,7 @@ class Day24(inputFile: String) {
 
     private fun nextTileLayout(blackTiles: Set<HexagonCoords>): Set<HexagonCoords> {
         val tilesToFlipToWhite = blackTiles.filterNot { tile -> tile.neighbours().count { it in blackTiles } in 1..2 }
-        val tilesToFlipToBlack = blackTiles.flatMap { it.neighbours() }.filterNot { it in blackTiles }
+        val tilesToFlipToBlack = blackTiles.flatMap { it.neighbours() }.distinct().filterNot { it in blackTiles }
             .filter { tile -> tile.neighbours().count { it in blackTiles } == 2 }
         return blackTiles - tilesToFlipToWhite + tilesToFlipToBlack
     }
