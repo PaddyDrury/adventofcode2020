@@ -10,13 +10,16 @@ class Day24(inputFile: String) {
 
     fun part2(): Int = blackTileSequence().drop(99).take(1).first().count()
 
-    private fun initialBlackTiles(): Set<HexagonCoords> = lines.map(::parseLine).groupingBy { it }.eachCount().filter { it.value % 2 == 1 }.keys
+    private fun initialBlackTiles(): Set<HexagonCoords> =
+        lines.map(::parseLine).groupingBy { it }.eachCount().filter { it.value % 2 == 1 }.keys
 
-    fun blackTileSequence(): Sequence<Set<HexagonCoords>> = generateSequence(nextTileLayout(initialBlackTiles())) { nextTileLayout(it) }
+    fun blackTileSequence(): Sequence<Set<HexagonCoords>> =
+        generateSequence(nextTileLayout(initialBlackTiles())) { nextTileLayout(it) }
 
-    private fun nextTileLayout(blackTiles:   Set<HexagonCoords>): Set<HexagonCoords> {
+    private fun nextTileLayout(blackTiles: Set<HexagonCoords>): Set<HexagonCoords> {
         val tilesToFlipToWhite = blackTiles.filterNot { tile -> tile.neighbours().count { it in blackTiles } in 1..2 }
-        val tilesToFlipToBlack = blackTiles.flatMap { it.neighbours() }.filterNot { it in blackTiles }.filter { tile -> tile.neighbours().count { it in blackTiles } == 2 }
+        val tilesToFlipToBlack = blackTiles.flatMap { it.neighbours() }.filterNot { it in blackTiles }
+            .filter { tile -> tile.neighbours().count { it in blackTiles } == 2 }
         return blackTiles - tilesToFlipToWhite + tilesToFlipToBlack
     }
 
@@ -41,6 +44,7 @@ data class HexagonCoords(val e: Int, val ne: Int) {
         "w" -> this.move(e = -1)
         else -> error("Invalid direction $direction")
     }
+
     private fun move(e: Int = 0, ne: Int = 0) = HexagonCoords(this.e + e, this.ne + ne)
     fun neighbours() = sequenceOf("sw", "se", "nw", "ne", "w", "e").map(::move).toSet()
 }
