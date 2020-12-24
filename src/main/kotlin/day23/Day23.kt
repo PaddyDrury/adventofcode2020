@@ -3,7 +3,7 @@ package day23
 typealias Circle = IntArray
 
 class Day23(val input: String) {
-    val startingCups = input.map(Char::toString).map(String::toInt)
+    private val startingCups = input.map(Char::toString).map(String::toInt)
 
     fun part1(): String = makeMoves(
         100,
